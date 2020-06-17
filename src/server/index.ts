@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as restana from 'restana';
 import { Protocol } from 'restana';
 import * as files from 'serve-static';
-import { putPosition } from './memory';
+import { getBroadcaster, isAvailableKey, putPosition } from './broadcasters';
 import { preparePosition, responseWithFile } from './utils';
 import { onClientConnected, sendToClientsWithKey } from './clients';
 
@@ -20,9 +20,7 @@ const serve = files(base);
 
 service.use('/assets', serve as restana.RequestHandler<Protocol.HTTP>);
 
-service.all('/ws', req => {
-    wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onClientConnected);
-});
+service.all('/ws', req => wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onClientConnected));
 
 service.get('/', (req, res) => {
     const { query } = url.parse(req.url, true);
@@ -47,4 +45,24 @@ service.get('/set', (req, res) => {
     sendToClientsWithKey(key, 'location_update', position);
 });
 
-void service.start(7000).then(() => console.log('Server started'));
+service.get('/get', (req, res) => {
+    const { query } = url.parse(req.url, true);
+    const key = query.key as string;
+
+    res.send(getBroadcaster(key));
+    res.end();
+});
+
+service.get('/check-available-key', (req, res) => {
+    const { query } = url.parse(req.url, true);
+    const key = query.key as string;
+
+    res.send({
+        result: {
+            available: isAvailableKey(key),
+        },
+    });
+    res.end();
+});
+
+void service.start(7001).then(() => console.log('Server started'));

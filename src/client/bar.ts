@@ -1,15 +1,15 @@
 import { IPositionRecord } from '../types';
-import { getSpeedByInterpolate } from './utils';
+import { getHumanTimeDiff, getSpeedByInterpolate } from './utils';
 import { getUnixTime } from '../utils';
 
-let speed: HTMLElement;
-let latency: HTMLElement;
+let nodeSpeed: HTMLElement;
+let nodeLatency: HTMLElement;
 
 let previousPosition: IPositionRecord;
 
 export const initBar = (): void => {
-    speed = document.getElementById('speed');
-    latency = document.getElementById('latency');
+    nodeSpeed = document.getElementById('speed');
+    nodeLatency = document.getElementById('latency');
     setInterval(updateLatency, 1000);
 };
 
@@ -17,14 +17,15 @@ export const setBarInfo = (position: IPositionRecord): void => {
     const kmPh = previousPosition
         ? getSpeedByInterpolate(position, previousPosition)
         : position.speed;
-    speed.textContent = String(kmPh);
-    latency.dataset.time = String(position.time);
+    nodeSpeed.textContent = String(kmPh);
+    nodeLatency.dataset.time = String(position.time);
     previousPosition = position;
 };
 
 const updateLatency = (): void => {
     const now = getUnixTime();
-    if (latency.dataset.time) {
-        latency.textContent = `${now - +latency.dataset.time} seconds ago`;
+    if (nodeLatency.dataset.time) {
+        const diff = now - +nodeLatency.dataset.time;
+        nodeLatency.textContent = diff ? `${getHumanTimeDiff(diff)} ago` : 'just now';
     }
 };
