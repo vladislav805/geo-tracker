@@ -1,16 +1,16 @@
 import * as ws from 'ws';
-import { IClient, IMessageEventMap, IMessageEventType, IMessageRequest } from '../types';
-import { getPosition } from './memory';
+import { IBroadcaster, IClientListener, IMessageEventData, IMessageEventType, IMessageRequest } from '../types';
+import { getBroadcaster } from './broadcasters';
 
-const clients = new Set<IClient>();
+const listeners = new Set<IClientListener>();
 
 export const onClientConnected = (socket: ws): void => {
-    const client: IClient = {
+    const client: IClientListener = {
         socket,
         key: null,
     };
 
-    clients.add(client);
+    listeners.add(client);
 
     socket.on('message', event => {
         const json = JSON.parse(event as string) as IMessageRequest;
@@ -18,18 +18,18 @@ export const onClientConnected = (socket: ws): void => {
         onClientRequest(client, json);
     });
 
-    socket.on('close', () => clients.delete(client));
+    socket.on('close', () => listeners.delete(client));
 };
 
-const onClientRequest = (client: IClient, { type, props }: IMessageRequest) => {
+const onClientRequest = (client: IClientListener, { type, props }: IMessageRequest) => {
     switch (type) {
         case 'init': {
             client.key = props.key;
 
-            const lastPosition = getPosition(client.key);
+            const broadcaster: IBroadcaster = getBroadcaster(client.key);
 
-            if (lastPosition) {
-                sendToClient(client.socket, 'location_update', lastPosition);
+            if (broadcaster) {
+                sendToClient(client.socket, 'broadcaster_info', broadcaster);
             }
             break;
         }
@@ -37,14 +37,14 @@ const onClientRequest = (client: IClient, { type, props }: IMessageRequest) => {
 };
 
 
-function sendToClient<E extends IMessageEventType, T extends IMessageEventMap[E]>(socket: ws, type: E, data?: T): void {
+function sendToClient<E extends IMessageEventType, T extends IMessageEventData<E>>(socket: ws, type: E, data?: T): void {
     socket.send(JSON.stringify({ type, data }));
 }
 
-export function sendToClientsWithKey<E extends IMessageEventType, T extends IMessageEventMap[E]>(key: string, type: E, data: T): void {
-    return Array.from(clients)
+export function sendToClientsWithKey<E extends IMessageEventType, T extends IMessageEventData<E>>(key: string, type: E, data: T): void {
+    return Array.from(listeners)
         .filter(client => client.key === key)
         .forEach(({socket}) => sendToClient(socket, type, data));
 }
 
-setInterval(() => clients.forEach(({ socket }) => sendToClient(socket, 'ping')), 40000);
+setInterval(() => listeners.forEach(({ socket }) => sendToClient(socket, 'ping')), 40000);
