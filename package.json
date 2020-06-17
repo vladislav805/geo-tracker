@@ -6,7 +6,8 @@
   "main": "server/server.js",
   "scripts": {
     "server:dev": "ts-node src/server/index.ts",
-    "dev": "webpack-dev-server",
+    "client:dev": "webpack-dev-server",
+    "dev": "run-p \"server:dev\" \"client:dev\"",
     "build": "webpack",
     "lint:es": "eslint --cache --ext .ts,.tsx src",
     "lint:style": "stylelint src/",
