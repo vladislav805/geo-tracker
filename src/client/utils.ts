@@ -4,12 +4,12 @@ import { IPositionRecord } from '../types';
 export const isDevelopment = process.env.DEV;
 export const isSecure = window.location.protocol === 'https:';
 
-const rad = (deg: number): number => deg * Math.PI / 180;
+export const rad = (deg: number): number => deg * Math.PI / 180;
 
 /**
  * Great circle distance
  */
-const convertToMeters = ([lat1, lng1]: LatLngTuple, [lat2, lng2]: LatLngTuple): number => {
+export const convertToMeters = ([lat1, lng1]: LatLngTuple, [lat2, lng2]: LatLngTuple): number => {
     const R = 6371;
     const dLat = rad(lat2 - lat1);
     const dLong = rad(lng2 - lng1);

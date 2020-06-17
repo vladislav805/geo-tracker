@@ -17,8 +17,6 @@ export const onClientConnected = (socket: ws): void => {
         const json = JSON.parse(event as string) as IMessageRequest;
 
         onClientRequest(client, json);
-
-
     });
 
     socket.on('close', () => clients.delete(client));
