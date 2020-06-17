@@ -1,7 +1,7 @@
 @import './var';
 
 .infobar {
-    padding: 20px 5px;
+    padding: 18px 6px;
     background-color: #f0f0f0;
     text-align: center;
     font-size: 1rem;
@@ -28,11 +28,12 @@
         vertical-align: sub;
     }
 
-    @media screen and (prefers-color-scheme: dark) {
+    @at-root .theme__dark & {
         background-color: #424242;
         color: #f0f0f0;
 
-        &__latency {
+        &__latency,
+        &__way {
             color: #aaaaaa;
         }
     }

@@ -1,9 +1,8 @@
 import * as L from 'leaflet';
 import { LatLngTuple } from 'leaflet';
 import { IBroadcaster, IPositionRecord } from '../types';
-import * as imageLocationBearing from './assets/location-bearing.svg';
-import * as imageLocationStay from './assets/location-place.svg';
-import { e } from './dom';
+import { createMapLocationMarker, createToggleControl } from './map-control';
+import { isDarkTheme, toggleDarkTheme } from './preferences';
 
 let map: L.Map;
 let location: L.Marker;
@@ -53,7 +52,19 @@ export const initMap = (): void => {
 
     L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
 
-    createFollowToggleControl().addTo(map);
+    createToggleControl({
+        label: 'Follow marker',
+        position: 'topright',
+        onChange: onChangeFollowToggleState,
+        checked: false,
+    }).addTo(map);
+
+    createToggleControl({
+        label: 'Night mode',
+        position: 'topright',
+        onChange: state => toggleDarkTheme(state),
+        checked: isDarkTheme(),
+    }).addTo(map);
 };
 
 export const setBroadcaster = (info: IBroadcaster) => {
@@ -83,47 +94,17 @@ export const setPosition = (position: IPositionRecord): void => {
         .setTooltipContent(`Accuracy: ${position.accuracy.toFixed(2)}m`);
 
     way.addLatLng(coords);
-};
 
-const createMapLocationMarker = (): HTMLElement => e('div', {
-    'class': 'current-location',
-}, [
-    e('img', {
-        'class': 'current-location__bearing',
-        src: imageLocationBearing.default,
-    }),
-    e('img', {
-        'class': 'current-location__stay',
-        src: imageLocationStay.default,
-    }),
-]);
-
-
-const createFollowToggleControl = (): L.Control => {
-    const buttonFollow: L.Control = new L.Control({
-        position: 'topright',
+    broadcaster.timeUpdated = position.time;
+    broadcaster.waypoints.push({
+        lat: position.lat,
+        lng: position.lng,
+        time: position.time,
+        speed: position.speed,
     });
-    buttonFollow.onAdd = () => createFollowToggleNode();
-    return buttonFollow;
 };
 
-const createFollowToggleNode = (): HTMLElement => {
-    return e('label', {
-        'class': 'leaflet-control-button followToggle',
-        onClick: event => event.stopPropagation(),
-    }, [
-        e<HTMLInputElement>('input', {
-            'class': 'followToggle-check',
-            type: 'checkbox',
-            onChange: function(this: HTMLInputElement) { onChangeFollowToggleState(this.checked) },
-        }),
-        e('span', {
-            'class': 'followToggle-label',
-        }, 'Follow marker'),
-    ]);
-};
-
-const onChangeFollowToggleState = (state: boolean) => {
+const onChangeFollowToggleState = (state: boolean): void => {
     follow = state;
 
     if (follow) {

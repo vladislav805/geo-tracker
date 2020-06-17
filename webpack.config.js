@@ -93,6 +93,9 @@ module.exports = {
                 target: 'ws://localhost:7001',
                 ws: true,
             },
+            '/set': {
+                target: 'http://localhost:7001',
+            },
         },
     },
 

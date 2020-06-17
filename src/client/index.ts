@@ -2,6 +2,7 @@ import './client.scss';
 import { connect, onMessageEvent, request2socket } from './connect';
 import { initMap, setBroadcaster, setPosition } from './map';
 import { initBar, setBarInfo } from './bar';
+import { initPreferences } from './preferences';
 
 const makeConnection = () => {
     const key = new URLSearchParams(window.location.search).get('key');
@@ -25,6 +26,7 @@ const makeConnection = () => {
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     initBar();
+    initPreferences();
 
     void makeConnection();
 });
