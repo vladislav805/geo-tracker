@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "jsx": "preserve",
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "target": "esnext",
+        "sourceMap": true,
+        "lib": ["dom", "es6"],
+        "noImplicitReturns": false,
+        "noImplicitAny": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules/*",
+        "src/tests/*"
+    ]
+}

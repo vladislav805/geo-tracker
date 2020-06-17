@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:cc="http://creativecommons.org/ns#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:svg="http://www.w3.org/2000/svg"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     id="SVGRoot"
+     version="1.1"
+     viewBox="0 0 36.0 36.0"
+     height="36.0px"
+     width="36.0px"
+     inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+     sodipodi:docname="location-bearing.svg">
+    <defs
+         id="defs674" />
+    <sodipodi:namedview
+         id="base"
+         pagecolor="#888888"
+         bordercolor="#666666"
+         borderopacity="1.0"
+         inkscape:pageopacity="0.0"
+         inkscape:pageshadow="2"
+         inkscape:zoom="15.839192"
+         inkscape:cx="12.129981"
+         inkscape:cy="14.569598"
+         inkscape:document-units="px"
+         inkscape:current-layer="SVGRoot"
+         inkscape:document-rotation="0"
+         showgrid="true"
+         showguides="true"
+         inkscape:guide-bbox="true">
+        <inkscape:grid
+             id="grid683"
+             type="xygrid" />
+        <sodipodi:guide
+             position="18,35"
+             orientation="-1,0"
+             id="guide762"
+             inkscape:label="Y"
+             inkscape:locked="false"
+             inkscape:color="rgb(0,0,255)" />
+        <sodipodi:guide
+             position="18,2"
+             orientation="0,1"
+             id="guide764"
+             inkscape:label=""
+             inkscape:locked="false"
+             inkscape:color="rgb(0,0,255)" />
+    </sodipodi:namedview>
+    <metadata
+         id="metadata677">
+        <rdf:RDF>
+            <cc:Work
+                 rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:type
+                     rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+                <dc:title />
+            </cc:Work>
+        </rdf:RDF>
+    </metadata>
+    <path
+         style="fill:#ff0000;stroke:#ffffff;stroke-width:1.5px"
+         d="M 18,2 5,34 18,30 31,34 Z"
+         id="path760"
+         sodipodi:nodetypes="ccccc" />
+</svg>

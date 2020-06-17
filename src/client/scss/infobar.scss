@@ -1,0 +1,39 @@
+@import './var';
+
+.infobar {
+	padding: 20px 5px;
+	background-color: #f0f0f0;
+	text-align: center;
+	font-size: 1rem;
+
+	&__speed {
+		font-weight: bold;
+		margin-bottom: 8px;
+	}
+
+	&__latency {
+		color: #888888;
+	}
+
+	.top {
+		width: 100px;
+	}
+
+	.icon {
+		width: 24px;
+		height: 24px;
+		display: inline-block;
+		background-repeat: no-repeat;
+		background-size: contain;
+		vertical-align: sub;
+	}
+
+	@media screen and (prefers-color-scheme: dark) {
+		background-color: #424242;
+		color: #f0f0f0;
+
+		&__latency {
+			color: #aaa;
+		}
+	}
+}

@@ -1,0 +1,88 @@
+#map {
+	width: 100%;
+	height: 100%;
+}
+
+.leaflet-tile-pane {
+	@media screen and (prefers-color-scheme: dark) {
+		filter: invert(100) hue-rotate(180deg);
+	}
+}
+
+.leaflet-div-icon {
+	background: none;
+	border: none;
+}
+
+.current-location {
+	position: relative;
+
+	img {
+		top: 0;
+		left: 0;
+		position: absolute;
+		display: none;
+	}
+
+	&[data-drive="true"] .current-location__bearing,
+	&[data-drive="false"] .current-location__stay {
+		display: block;
+	}
+
+	.current-location__bearing {
+		transform: rotate(var(--bearing));
+	}
+}
+
+/**
+ * Controls
+ */
+.followToggle {
+	background: white;
+	padding: 5px 12px;
+	cursor: default;
+
+	&-check {
+		display: none;
+	}
+
+	&-label {
+		position: relative;
+		line-height: 22px;
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: center;
+
+		&::before {
+			content: '';
+			display: block;
+			align-self: flex-start;
+			border: 2px solid black;
+			border-radius: 3px;
+			width: 22px;
+			min-width: 22px;
+			height: 22px;
+			margin-right: 10px;
+			z-index: 820;
+		}
+
+		&::after {
+			content: '';
+			display: block;
+			border: 2px solid white;
+			z-index: 822;
+			position: absolute;
+			border-top-color: rgba(0,0,0,0);
+			border-left-color: rgba(0,0,0,0);
+			top: 2px;
+			left: 7px;
+			width: 8px;
+			height: 14px;
+			transform: rotate(45deg);
+		}
+	}
+
+	&-check:checked + &-label::before {
+		background: black;
+	}
+}
