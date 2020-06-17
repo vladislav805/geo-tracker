@@ -2,12 +2,11 @@ import * as ws from 'ws';
 import * as url from 'url';
 import * as path from 'path';
 import * as restana from 'restana';
+import { Protocol } from 'restana';
 import * as files from 'serve-static';
 import { putPosition } from './memory';
 import { preparePosition, responseWithFile } from './utils';
 import { onClientConnected, sendToClientsWithKey } from './clients';
-import { EVENT_POSITION_CHANGED } from '../cmd';
-import { Protocol } from 'restana';
 
 const base = process.cwd();
 
@@ -45,7 +44,7 @@ service.get('/set', (req, res) => {
     res.write('ok');
     res.end();
 
-    sendToClientsWithKey(key, EVENT_POSITION_CHANGED, position);
+    sendToClientsWithKey(key, 'location_update', position);
 });
 
 void service.start(7000).then(() => console.log('Server started'));

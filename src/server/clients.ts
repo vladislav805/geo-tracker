@@ -1,7 +1,6 @@
 import * as ws from 'ws';
-import { IClient, IMessageRequest, IPositionRecord } from '../types';
+import { IClient, IMessageEventMap, IMessageEventType, IMessageRequest } from '../types';
 import { getPosition } from './memory';
-import { EVENT_PING, EVENT_POSITION_CHANGED } from '../cmd';
 
 const clients = new Set<IClient>();
 
@@ -30,7 +29,7 @@ const onClientRequest = (client: IClient, { type, props }: IMessageRequest) => {
             const lastPosition = getPosition(client.key);
 
             if (lastPosition) {
-                sendToClient<IPositionRecord>(client.socket, EVENT_POSITION_CHANGED, lastPosition);
+                sendToClient(client.socket, 'location_update', lastPosition);
             }
             break;
         }
@@ -38,10 +37,14 @@ const onClientRequest = (client: IClient, { type, props }: IMessageRequest) => {
 };
 
 
-const sendToClient = <T>(socket: ws, type: string, data?: T): void => socket.send(JSON.stringify({ type, data }));
+function sendToClient<E extends IMessageEventType, T extends IMessageEventMap[E]>(socket: ws, type: E, data?: T): void {
+    socket.send(JSON.stringify({ type, data }));
+}
 
-export const sendToClientsWithKey = <T>(key: string, type: string, data: T): void => Array.from(clients)
+export function sendToClientsWithKey<E extends IMessageEventType, T extends IMessageEventMap[E]>(key: string, type: E, data: T): void {
+    return Array.from(clients)
         .filter(client => client.key === key)
         .forEach(({socket}) => sendToClient(socket, type, data));
+}
 
-setInterval(() => clients.forEach(({ socket }) => sendToClient(socket, EVENT_PING )), 40000);
+setInterval(() => clients.forEach(({ socket }) => sendToClient(socket, 'ping')), 40000);
