@@ -25,6 +25,7 @@ export const setBarInfo = (position: IPositionRecord): void => {
 const updateLatency = (): void => {
     const now = getUnixTime();
     if (latency.dataset.time) {
-        latency.textContent = `${getHumanTimeDiff(now - +latency.dataset.time)} ago`;
+        const diff = now - +latency.dataset.time;
+        latency.textContent = diff ? `${getHumanTimeDiff(diff)} ago` : 'just now';
     }
 };
