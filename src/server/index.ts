@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as restana from 'restana';
 import { Protocol } from 'restana';
 import * as files from 'serve-static';
-import { getBroadcaster, putPosition } from './broadcasters';
+import { getBroadcaster, isAvailableKey, putPosition } from './broadcasters';
 import { preparePosition, responseWithFile } from './utils';
 import { onClientConnected, sendToClientsWithKey } from './clients';
 
@@ -51,6 +51,18 @@ service.get('/get', (req, res) => {
 
     res.send(getBroadcaster(key));
     res.end();
-})
+});
+
+service.get('/check-available-key', (req, res) => {
+    const { query } = url.parse(req.url, true);
+    const key = query.key as string;
+
+    res.send({
+        result: {
+            available: isAvailableKey(key),
+        },
+    });
+    res.end();
+});
 
 void service.start(7000).then(() => console.log('Server started'));
