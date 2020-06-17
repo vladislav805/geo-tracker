@@ -11,21 +11,17 @@
         margin-bottom: 8px;
     }
 
-    &__latency {
+    &__latency,
+    &__way {
         color: #888888;
     }
 
-    .top {
-        width: 100px;
+    &__latency {
+        margin-bottom: 6px;
     }
 
-    .icon {
-        width: 24px;
-        height: 24px;
-        display: inline-block;
-        background-repeat: no-repeat;
-        background-size: contain;
-        vertical-align: sub;
+    &__way {
+        font-size: .8rem;
     }
 
     @at-root .theme__dark & {

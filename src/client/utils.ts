@@ -1,12 +1,12 @@
 import { LatLngTuple } from 'leaflet';
-import { IPositionRecord } from '../types';
+import { IPositionRecord, IWaypoint } from '../types';
 
 export const rad = (deg: number): number => deg * Math.PI / 180;
 
 /**
  * Great circle distance
  */
-export const convertToMeters = ([lat1, lng1]: LatLngTuple, [lat2, lng2]: LatLngTuple): number => {
+export const distance = ([lat1, lng1]: LatLngTuple, [lat2, lng2]: LatLngTuple): number => {
     const R = 6371;
     const dLat = rad(lat2 - lat1);
     const dLong = rad(lng2 - lng1);
@@ -24,7 +24,7 @@ export const convertToMeters = ([lat1, lng1]: LatLngTuple, [lat2, lng2]: LatLngT
  */
 export const getSpeedByInterpolate = (fresh: IPositionRecord, previous: IPositionRecord): number => {
     const t = (fresh.time - (previous.time || 0)) / 3600;
-    const S = convertToMeters([fresh.lat, fresh.lng], [previous.lat, previous.lng]);
+    const S = distance([fresh.lat, fresh.lng], [previous.lat, previous.lng]);
     return Math.abs(S / t) || 0;
 };
 
@@ -45,3 +45,19 @@ export const getHumanTimeDiff = (delta: number): string => {
 
     return res.join(', ');
 };
+
+export const wayDistance = (way: IWaypoint[]): number => {
+    let res = 0;
+
+    for (let i = 1; i < way.length; ++i) {
+        const curr = way[i];
+        const prev = way[i - 1];
+        res += distance([curr.lat, curr.lng], [prev.lat, prev.lng]);
+    }
+
+    return res;
+};
+
+export const distanceHumanize = (km: number) => km < 1
+    ? `${((km / 1000) | 0)}m`
+    : `${km.toFixed(1)}km`;

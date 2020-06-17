@@ -72,26 +72,27 @@ export const setBroadcaster = (info: IBroadcaster) => {
 
     info.waypoints.forEach(point => way.addLatLng([point.lat, point.lng]));
 
-    const last = info.position;
-
-    if (last) {
-        setPosition(last);
+    if (info.position) {
+        setPosition(info.position);
     }
 };
+
+export const getBroadcaster = (): IBroadcaster => broadcaster;
 
 export const setPosition = (position: IPositionRecord): void => {
     const coords: LatLngTuple = [position.lat, position.lng];
 
     map.setView(coords, map.getZoom());
 
-    location.setLatLng(coords);
+    location
+        .setLatLng(coords)
+        .bindTooltip(`Accuracy: ${position.accuracy.toFixed(2)}m`);
 
     icon.dataset.drive = String(position.speed > 1);
     icon.style.setProperty('--bearing', `${position.bearing}deg`);
 
     circle.setLatLng(coords)
-        .setRadius(position.accuracy)
-        .setTooltipContent(`Accuracy: ${position.accuracy.toFixed(2)}m`);
+        .setRadius(position.accuracy);
 
     way.addLatLng(coords);
 
