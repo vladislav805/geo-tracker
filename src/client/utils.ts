@@ -1,9 +1,6 @@
 import { LatLngTuple } from 'leaflet';
 import { IPositionRecord } from '../types';
 
-export const isDevelopment = process.env.DEV;
-export const isSecure = window.location.protocol === 'https:';
-
 export const rad = (deg: number): number => deg * Math.PI / 180;
 
 /**
@@ -29,4 +26,20 @@ export const getSpeedByInterpolate = (fresh: IPositionRecord, previous: IPositio
     const t = (fresh.time - (previous.time || 0)) / 3600;
     const S = convertToMeters([fresh.lat, fresh.lng], [previous.lat, previous.lng]);
     return Math.abs(S / t) || 0;
+};
+
+const pluralize = (n: number, text: string): string => (n % 10) === 1 ? text : text + 's';
+
+export const getHumanTimeDiff = (delta: number): string => {
+    const m = Math.floor(delta / 60 % 60);
+    const res = [];
+
+    if (m) {
+        res.push(`${m} ${pluralize(m, 'minute')}`);
+    }
+
+    const s = Math.floor(delta % 60);
+    res.push(`${s} ${pluralize(s, 'second')}`);
+
+    return res.join(', ');
 };

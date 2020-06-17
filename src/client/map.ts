@@ -1,6 +1,6 @@
 import * as L from 'leaflet';
 import { LatLngTuple } from 'leaflet';
-import { IPositionRecord } from '../types';
+import { IBroadcaster, IPositionRecord } from '../types';
 import * as imageLocationBearing from './assets/location-bearing.svg';
 import * as imageLocationStay from './assets/location-place.svg';
 import { e } from './dom';
@@ -11,6 +11,8 @@ let icon: HTMLElement;
 let way: L.Polyline;
 let circle: L.Circle;
 let follow = false;
+
+let broadcaster: IBroadcaster;
 
 const spb: LatLngTuple = [59.938531, 30.313497];
 
@@ -52,6 +54,18 @@ export const initMap = (): void => {
     L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
 
     createFollowToggleControl().addTo(map);
+};
+
+export const setBroadcaster = (info: IBroadcaster) => {
+    broadcaster = info;
+
+    info.waypoints.forEach(point => way.addLatLng([point.lat, point.lng]));
+
+    const last = info.position;
+
+    if (last) {
+        setPosition(last);
+    }
 };
 
 export const setPosition = (position: IPositionRecord): void => {

@@ -1,5 +1,5 @@
 import { IPositionRecord } from '../types';
-import { getSpeedByInterpolate } from './utils';
+import { getHumanTimeDiff, getSpeedByInterpolate } from './utils';
 import { getUnixTime } from '../utils';
 
 let speed: HTMLElement;
@@ -25,6 +25,6 @@ export const setBarInfo = (position: IPositionRecord): void => {
 const updateLatency = (): void => {
     const now = getUnixTime();
     if (latency.dataset.time) {
-        latency.textContent = `${now - +latency.dataset.time} seconds ago`;
+        latency.textContent = `${getHumanTimeDiff(now - +latency.dataset.time)} ago`;
     }
 };
