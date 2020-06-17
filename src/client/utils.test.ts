@@ -1,4 +1,4 @@
-import { convertToMeters, getHumanTimeDiff, getSpeedByInterpolate, rad } from './utils';
+import { distance, getHumanTimeDiff, getSpeedByInterpolate, rad } from './utils';
 import { IPositionRecord } from '../types';
 
 describe('Client utils', () => {
@@ -7,8 +7,8 @@ describe('Client utils', () => {
         expect(rad(90)).toBeCloseTo(1.570796326);
     });
 
-    it('Function convertToMeters', () => {
-        expect(convertToMeters([60, 30], [60.148, 29.995])).toBeCloseTo(16.459, 2);
+    it('Function distance', () => {
+        expect(distance([60, 30], [60.148, 29.995])).toBeCloseTo(16.459, 2);
     });
 
     it('Function getSpeedByInterpolate', () => {

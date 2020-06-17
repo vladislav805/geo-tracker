@@ -1,7 +1,7 @@
 @import './var';
 
 .infobar {
-    padding: 20px 5px;
+    padding: 18px 6px;
     background-color: #f0f0f0;
     text-align: center;
     font-size: 1rem;
@@ -11,28 +11,25 @@
         margin-bottom: 8px;
     }
 
-    &__latency {
+    &__latency,
+    &__way {
         color: #888888;
     }
 
-    .top {
-        width: 100px;
+    &__latency {
+        margin-bottom: 6px;
     }
 
-    .icon {
-        width: 24px;
-        height: 24px;
-        display: inline-block;
-        background-repeat: no-repeat;
-        background-size: contain;
-        vertical-align: sub;
+    &__way {
+        font-size: .8rem;
     }
 
-    @media screen and (prefers-color-scheme: dark) {
+    @at-root .theme__dark & {
         background-color: #424242;
         color: #f0f0f0;
 
-        &__latency {
+        &__latency,
+        &__way {
             color: #aaaaaa;
         }
     }

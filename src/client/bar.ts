@@ -1,25 +1,35 @@
 import { IPositionRecord } from '../types';
-import { getHumanTimeDiff, getSpeedByInterpolate } from './utils';
+import { distanceHumanize, getHumanTimeDiff, wayDistance } from './utils';
 import { getUnixTime } from '../utils';
+import { getBroadcaster } from './map';
 
 let nodeSpeed: HTMLElement;
 let nodeLatency: HTMLElement;
+let nodeWay: HTMLElement;
 
 let previousPosition: IPositionRecord;
 
 export const initBar = (): void => {
     nodeSpeed = document.getElementById('speed');
     nodeLatency = document.getElementById('latency');
+    nodeWay = document.getElementById('way');
     setInterval(updateLatency, 1000);
 };
 
 export const setBarInfo = (position: IPositionRecord): void => {
-    const kmPh = previousPosition
+    /*const kmPh = previousPosition
         ? getSpeedByInterpolate(position, previousPosition)
-        : position.speed;
-    nodeSpeed.textContent = String(kmPh);
+        : position.speed;*/
+    const kmPh = position.speed;
+    nodeSpeed.textContent = kmPh.toFixed(1);
     nodeLatency.dataset.time = String(position.time);
     previousPosition = position;
+
+    const broadcaster = getBroadcaster();
+
+    if (broadcaster) {
+        nodeWay.textContent = `Distance ~${distanceHumanize(wayDistance(broadcaster.waypoints))}, duration: ${getHumanTimeDiff(broadcaster.timeUpdated - broadcaster.timeCreated)}`;
+    }
 };
 
 const updateLatency = (): void => {

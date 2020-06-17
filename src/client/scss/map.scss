@@ -4,7 +4,9 @@
 }
 
 .leaflet-tile-pane {
-    @media screen and (prefers-color-scheme: dark) {
+    transition: filter .3s ease-in-out;
+
+    @at-root .theme__dark & {
         filter: invert(100) hue-rotate(180deg);
     }
 }
@@ -40,7 +42,7 @@
  * Controls
  */
 
-.followToggle {
+.leafletToggleControl {
     background: white;
     padding: 5px 12px;
     cursor: default;
