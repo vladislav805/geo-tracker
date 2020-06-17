@@ -65,4 +65,4 @@ service.get('/check-available-key', (req, res) => {
     res.end();
 });
 
-void service.start(7000).then(() => console.log('Server started'));
+void service.start(7001).then(() => console.log('Server started'));

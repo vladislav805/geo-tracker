@@ -8,11 +8,8 @@ export const connect = (): Promise<WebSocket> => {
             return Promise.resolve(socket);
         }
 
-        let endpoint = (window.location.protocol === "https:" ? "wss" : "ws") + "://" + window.location.host + "/ws";
-
-        if (process.env.DEV) {
-            endpoint = 'ws://localhost:7000/ws';
-        }
+        const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        const endpoint = `${protocol}://${window.location.host}/ws`;
 
         socket = new WebSocket(endpoint);
 
