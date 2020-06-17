@@ -4,23 +4,15 @@ import { EVENT_POSITION_CHANGED } from '../cmd';
 import { initMap, setPosition } from './map';
 import { initBar, setBarInfo } from './bar';
 
-const makeConnection = async() => {
-    const socket = await connect();
+const makeConnection = () => {
     const key = new URLSearchParams(window.location.search).get('key');
+    void connect().then(() => {
+        request2socket({ type: 'init', props: { key } });
 
-    request2socket({ type: 'init', props: { key } });
-
-    onMessageEvent(EVENT_POSITION_CHANGED, event => {
-        setPosition(event.data);
-        setBarInfo(event.data);
-    });
-
-    socket.addEventListener('error', () => {
-        alert('Connection with server lost. Need to reload the page.');
-    });
-
-    socket.addEventListener('close', () => {
-        alert('Connection with server lost. Need to reload the page.');
+        onMessageEvent(EVENT_POSITION_CHANGED, event => {
+            setPosition(event.data);
+            setBarInfo(event.data);
+        });
     });
 };
 
@@ -28,6 +20,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initMap();
     initBar();
 
-    // noinspection JSIgnoredPromiseFromCall
-    makeConnection();
+    void makeConnection();
 });

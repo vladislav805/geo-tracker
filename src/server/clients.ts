@@ -42,7 +42,7 @@ const onClientRequest = (client: IClient, { type, props }: IMessageRequest) => {
 
 const sendToClient = <T>(socket: ws, type: string, data?: T): void => socket.send(JSON.stringify({ type, data }));
 
-export const sendToClientsWithKey = (key: string, type: string, data: Record<string, any>): void => Array.from(clients)
+export const sendToClientsWithKey = <T>(key: string, type: string, data: T): void => Array.from(clients)
         .filter(client => client.key === key)
         .forEach(({socket}) => sendToClient(socket, type, data));
 
