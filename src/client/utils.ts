@@ -28,18 +28,20 @@ export const getSpeedByInterpolate = (fresh: IPositionRecord, previous: IPositio
     return Math.abs(S / t) || 0;
 };
 
-const pluralize = (n: number, text: string): string => (n % 10) === 1 ? text : text + 's';
+const pluralize = (n: number, text: string): string => (n % 10) === 1 && n !== 11 ? text : text + 's';
 
 export const getHumanTimeDiff = (delta: number): string => {
     const m = Math.floor(delta / 60 % 60);
+    const s = Math.floor(delta % 60);
     const res = [];
 
     if (m) {
         res.push(`${m} ${pluralize(m, 'minute')}`);
     }
 
-    const s = Math.floor(delta % 60);
-    res.push(`${s} ${pluralize(s, 'second')}`);
+    if (s) {
+        res.push(`${s} ${pluralize(s, 'second')}`);
+    }
 
     return res.join(', ');
 };
