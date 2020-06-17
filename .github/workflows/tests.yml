@@ -1,0 +1,14 @@
+name: Test
+on: [push]
+jobs:
+  jest:
+    name: jest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copy Repository Contents
+        uses: actions/checkout@v1
+
+      - name: Testing
+        run: |
+          npm ci
+          npm run test

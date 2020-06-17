@@ -1,46 +1,23 @@
 import './client.scss';
-import { connect } from './connect';
-import { isDevelopment } from './utils';
-import { EVENT_POSITION_CHANGED } from '../cmd';
+import { connect, onMessageEvent, request2socket } from './connect';
 import { initMap, setPosition } from './map';
 import { initBar, setBarInfo } from './bar';
 
 const makeConnection = () => {
-    const socket = connect();
+    const key = new URLSearchParams(window.location.search).get('key');
+    void connect().then(() => {
+        request2socket({ type: 'init', props: { key } });
 
-    socket.addEventListener('open', () => {
-        socket.send(JSON.stringify({ init_key: new URLSearchParams(window.location.search).get('key') }));
-    });
-
-    socket.addEventListener('message', event => {
-        const message = event.data;
-
-        const { type, data } = JSON.parse(message);
-
-        if (isDevelopment) {
-            console.log('message', type, data);
-        }
-
-        switch (type) {
-            case EVENT_POSITION_CHANGED: {
-                setPosition(data);
-                setBarInfo(data);
-                break;
-            }
-        }
-    });
-
-    socket.addEventListener('error', () => {
-        alert('Connection with server lost. Need to reload the page.');
-    });
-
-    socket.addEventListener('close', () => {
-        alert('Connection with server lost. Need to reload the page.');
+        onMessageEvent('location_update', event => {
+            setPosition(event.data);
+            setBarInfo(event.data);
+        });
     });
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     initBar();
-    makeConnection();
+
+    void makeConnection();
 });

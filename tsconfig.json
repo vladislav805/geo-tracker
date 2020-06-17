@@ -1,11 +1,10 @@
 {
     "compilerOptions": {
-        "jsx": "preserve",
         "module": "CommonJS",
         "moduleResolution": "node",
-        "target": "esnext",
+        "target": "ES2019",
         "sourceMap": true,
-        "lib": ["dom", "es6"],
+        "lib": ["ES2019", "DOM"],
         "noImplicitReturns": false,
         "noImplicitAny": true
     },
