@@ -16,6 +16,8 @@
 
 .current-location {
 	position: relative;
+	width: 36px;
+	height: 36px;
 
 	img {
 		top: 0;
@@ -30,7 +32,7 @@
 	}
 
 	.current-location__bearing {
-		transform: rotate(var(--bearing));
+		transform: rotate(var(--bearing)) translateY(-4px);
 	}
 }
 

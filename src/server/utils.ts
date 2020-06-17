@@ -18,13 +18,13 @@ export const preparePosition = (query: ParsedUrlQuery): IPositionRecord => {
     };
 };
 
-export const responseWithFile = (response: http.ServerResponse & restana.ResponseExtensions, path: string) => {
+export const responseWithFile = (response: http.ServerResponse & restana.ResponseExtensions, path: string): void => {
     fs.readFile(path, 'binary', (err, file) => {
         if (err) {
             response.writeHead(500, {
                 'Content-Type': 'text/plain',
             });
-            response.write(`${err}\n`);
+            response.write(`${String(err)}\n`);
             response.end();
             return;
         }

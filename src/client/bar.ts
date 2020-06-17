@@ -5,23 +5,24 @@ import { getUnixTime } from '../utils';
 let speed: HTMLElement;
 let latency: HTMLElement;
 
-let prev: IPositionRecord;
+let previousPosition: IPositionRecord;
 
-export const initBar = () => {
+export const initBar = (): void => {
     speed = document.getElementById('speed');
     latency = document.getElementById('latency');
     setInterval(updateLatency, 1000);
 };
 
-export const setBarInfo = (position: IPositionRecord) => {
-    speed.textContent = prev
-        ? getSpeedByInterpolate(position, prev).toFixed(1)
-        : String(position.speed);
+export const setBarInfo = (position: IPositionRecord): void => {
+    const kmPh = previousPosition
+        ? getSpeedByInterpolate(position, previousPosition)
+        : position.speed;
+    speed.textContent = String(kmPh);
     latency.dataset.time = String(position.time);
-    prev = position;
+    previousPosition = position;
 };
 
-const updateLatency = () => {
+const updateLatency = (): void => {
     const now = getUnixTime();
     if (latency.dataset.time) {
         latency.textContent = `${now - +latency.dataset.time} seconds ago`;

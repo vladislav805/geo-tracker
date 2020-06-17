@@ -1,33 +1,18 @@
 import './client.scss';
-import { connect } from './connect';
-import { isDevelopment } from './utils';
+import { connect, onMessageEvent, request2socket } from './connect';
 import { EVENT_POSITION_CHANGED } from '../cmd';
 import { initMap, setPosition } from './map';
 import { initBar, setBarInfo } from './bar';
 
-const makeConnection = () => {
-    const socket = connect();
+const makeConnection = async() => {
+    const socket = await connect();
+    const key = new URLSearchParams(window.location.search).get('key');
 
-    socket.addEventListener('open', () => {
-        socket.send(JSON.stringify({ init_key: new URLSearchParams(window.location.search).get('key') }));
-    });
+    request2socket({ type: 'init', props: { key } });
 
-    socket.addEventListener('message', event => {
-        const message = event.data;
-
-        const { type, data } = JSON.parse(message);
-
-        if (isDevelopment) {
-            console.log('message', type, data);
-        }
-
-        switch (type) {
-            case EVENT_POSITION_CHANGED: {
-                setPosition(data);
-                setBarInfo(data);
-                break;
-            }
-        }
+    onMessageEvent(EVENT_POSITION_CHANGED, event => {
+        setPosition(event.data);
+        setBarInfo(event.data);
     });
 
     socket.addEventListener('error', () => {
@@ -42,5 +27,7 @@ const makeConnection = () => {
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     initBar();
+
+    // noinspection JSIgnoredPromiseFromCall
     makeConnection();
 });

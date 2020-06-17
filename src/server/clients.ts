@@ -1,11 +1,11 @@
 import * as ws from 'ws';
-import { IClient } from '../types';
+import { IClient, IMessageRequest, IPositionRecord } from '../types';
 import { getPosition } from './memory';
 import { EVENT_PING, EVENT_POSITION_CHANGED } from '../cmd';
 
 const clients = new Set<IClient>();
 
-export const onClientConnected = (socket: ws) => {
+export const onClientConnected = (socket: ws): void => {
     const client: IClient = {
         socket,
         key: null,
@@ -14,22 +14,35 @@ export const onClientConnected = (socket: ws) => {
     clients.add(client);
 
     socket.on('message', event => {
-        const json = JSON.parse(event as string);
-        client.key = json.init_key;
+        const json = JSON.parse(event as string) as IMessageRequest;
 
-        const lastPosition = getPosition(client.key);
+        onClientRequest(client, json);
 
-        if (lastPosition) {
-            sendToClient(socket, EVENT_POSITION_CHANGED, lastPosition);
-        }
+
     });
 
     socket.on('close', () => clients.delete(client));
 };
 
-const sendToClient = (socket: ws, type: string, data?: object) => socket.send(JSON.stringify({ type, data }));
+const onClientRequest = (client: IClient, { type, props }: IMessageRequest) => {
+    switch (type) {
+        case 'init': {
+            client.key = props.key;
 
-export const sendToClientsWithKey = (key: string, type: string, data: object) => Array.from(clients)
+            const lastPosition = getPosition(client.key);
+
+            if (lastPosition) {
+                sendToClient<IPositionRecord>(client.socket, EVENT_POSITION_CHANGED, lastPosition);
+            }
+            break;
+        }
+    }
+};
+
+
+const sendToClient = <T>(socket: ws, type: string, data?: T): void => socket.send(JSON.stringify({ type, data }));
+
+export const sendToClientsWithKey = (key: string, type: string, data: Record<string, any>): void => Array.from(clients)
         .filter(client => client.key === key)
         .forEach(({socket}) => sendToClient(socket, type, data));
 

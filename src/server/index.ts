@@ -48,4 +48,4 @@ service.get('/set', (req, res) => {
     sendToClientsWithKey(key, EVENT_POSITION_CHANGED, position);
 });
 
-service.start(7000).then(() => console.log('Server started'));
+void service.start(7000).then(() => console.log('Server started'));

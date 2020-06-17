@@ -1,5 +1,23 @@
 import * as ws from 'ws';
 
+/**
+ * Events
+ */
+export type IMessageEventLocationChange = { type: 'location_update', data: IPositionRecord };
+export type IMessageEventPing = { type: 'ping' };
+
+export type IMessageEvent = IMessageEventLocationChange | IMessageEventPing;
+
+/**
+ * Requests
+ */
+type IMessageRequestInit = { type: 'init', props: { key: string } };
+
+export type IMessageRequest = IMessageRequestInit;
+
+/**
+ * Objects
+ */
 export interface IPositionRecord {
     time: number;
     lat: number;

@@ -10,11 +10,11 @@ let location: L.Marker;
 let icon: HTMLElement;
 let way: L.Polyline;
 let circle: L.Circle;
-let follow: boolean = false;
+let follow = false;
 
 const spb: LatLngTuple = [59.938531, 30.313497];
 
-export const initMap = () => {
+export const initMap = (): void => {
     map = L.map('map').setView(spb, 10);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -54,7 +54,7 @@ export const initMap = () => {
     createFollowToggleControl().addTo(map);
 };
 
-export const setPosition = (position: IPositionRecord) => {
+export const setPosition = (position: IPositionRecord): void => {
     const coords: LatLngTuple = [position.lat, position.lng];
 
     map.setView(coords, map.getZoom());
@@ -76,11 +76,11 @@ const createMapLocationMarker = (): HTMLElement => e('div', {
 }, [
     e('img', {
         'class': 'current-location__bearing',
-        src: String(imageLocationBearing),
+        src: imageLocationBearing.default,
     }),
     e('img', {
         'class': 'current-location__stay',
-        src: String(imageLocationStay),
+        src: imageLocationStay.default,
     }),
 ]);
 
@@ -89,7 +89,7 @@ const createFollowToggleControl = (): L.Control => {
     const buttonFollow: L.Control = new L.Control({
         position: 'topright',
     });
-    buttonFollow.onAdd = (map) => createFollowToggleNode();
+    buttonFollow.onAdd = () => createFollowToggleNode();
     return buttonFollow;
 };
 
