@@ -35,7 +35,9 @@ export const responseWithFile = (response: http.ServerResponse & restana.Respons
         response.write(file, 'binary');
         response.end();
     });
-}
+};
+
+export const isFileExists = (path: string): boolean => fs.existsSync(path) && fs.statSync(path).isFile();
 
 const getMime = (ext: string) => {
     let mime = 'text/plain';
