@@ -115,7 +115,7 @@ const onChangeFollowToggleState = (state: boolean): void => {
     follow = state;
 
     if (follow) {
-        const constZoom = 15;
+        const constZoom = 16;
         if (location.getLatLng().lat) {
             map.flyTo(location.getLatLng(), constZoom, {
                 animate: true,

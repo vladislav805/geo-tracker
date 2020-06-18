@@ -58,6 +58,6 @@ export const wayDistance = (way: IWaypoint[]): number => {
     return res;
 };
 
-export const distanceHumanize = (km: number) => km < 1
+export const distanceHumanize = (km: number): string => km < 1
     ? `${((km / 1000) | 0)}m`
     : `${km.toFixed(1)}km`;
