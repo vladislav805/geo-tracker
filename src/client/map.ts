@@ -67,7 +67,7 @@ export const initMap = (): void => {
     }).addTo(map);
 };
 
-export const setBroadcaster = (info: IBroadcaster) => {
+export const setBroadcaster = (info: IBroadcaster): void => {
     broadcaster = info;
 
     info.waypoints.forEach(point => way.addLatLng([point.lat, point.lng]));
@@ -84,9 +84,11 @@ export const setPosition = (position: IPositionRecord): void => {
 
     map.setView(coords, map.getZoom());
 
-    location
-        .setLatLng(coords)
-        .bindTooltip(`Accuracy: ${position.accuracy.toFixed(2)}m`);
+    location.setLatLng(coords);
+
+    if (position.accuracy) {
+        location.bindTooltip(`Accuracy: ${position.accuracy.toFixed(2)}m`);
+    }
 
     icon.dataset.drive = String(position.speed > 1);
     icon.style.setProperty('--bearing', `${position.bearing}deg`);
@@ -96,13 +98,17 @@ export const setPosition = (position: IPositionRecord): void => {
 
     way.addLatLng(coords);
 
-    broadcaster.timeUpdated = position.time;
-    broadcaster.waypoints.push({
-        lat: position.lat,
-        lng: position.lng,
-        time: position.time,
-        speed: position.speed,
-    });
+    if (broadcaster) {
+        broadcaster.timeUpdated = position.time;
+        broadcaster.waypoints.push({
+            lat: position.lat,
+            lng: position.lng,
+            time: position.time,
+            speed: position.speed,
+        });
+    } else {
+        window.location.reload();
+    }
 };
 
 const onChangeFollowToggleState = (state: boolean): void => {

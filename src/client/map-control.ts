@@ -35,6 +35,7 @@ export const createToggleControl = (props: ILeafletToggleControlOptions): L.Cont
 
 export const createMapLocationMarker = (): HTMLElement => e('div', {
     'class': 'current-location',
+    'data-drive': 'false',
 }, [
     e('img', {
         'class': 'current-location__bearing',
