@@ -1,12 +1,10 @@
 import * as ws from 'ws';
 import * as url from 'url';
-import * as path from 'path';
+import { resolve } from 'path';
 import * as restana from 'restana';
-import { Protocol } from 'restana';
-import * as files from 'serve-static';
-import { getBroadcaster, isAvailableKey, putPosition } from './broadcasters';
-import { preparePosition, responseWithFile } from './utils';
-import { onClientConnected, sendToClientsWithKey } from './clients';
+import { isFileExists, responseWithFile } from './utils';
+import { onClientConnected } from './clients';
+import methods, { hasMethod } from './methods';
 
 const base = process.cwd();
 
@@ -16,53 +14,40 @@ const wss: ws.Server = new ws.Server({
 
 export const service = restana();
 
-const serve = files(base);
+service.all('/api/ws', req => wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onClientConnected));
 
-service.use('/assets', serve as restana.RequestHandler<Protocol.HTTP>);
+service.all('/api/:path?', async(req, res) => {
+    const parsedUrl = url.parse(req.url, true);
+    let pathname = parsedUrl.pathname.substring(1);
+    const { query } = parsedUrl;
+    const method = req.params.path;
 
-service.all('/ws', req => wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onClientConnected));
+    if (!pathname) {
+        pathname = 'index.html';
+    }
 
-service.get('/', (req, res) => {
-    const { query } = url.parse(req.url, true);
+    const filename = resolve(base, 'dist', pathname);
 
-    const filename = query.key
-        ? 'index.html'
-        : 'none-key.html';
+    if (isFileExists(filename)) {
+        responseWithFile(res, filename);
+        return;
+    }
 
-    responseWithFile(res, path.resolve(base, filename));
-});
-
-service.get('/set', (req, res) => {
-    const { query } = url.parse(req.url, true);
-    const key = query.key as string;
-
-    const position = preparePosition(query);
-
-    putPosition(key, position);
-    res.write('ok');
-    res.end();
-
-    sendToClientsWithKey(key, 'location_update', position);
-});
-
-service.get('/get', (req, res) => {
-    const { query } = url.parse(req.url, true);
-    const key = query.key as string;
-
-    res.send(getBroadcaster(key));
-    res.end();
-});
-
-service.get('/check-available-key', (req, res) => {
-    const { query } = url.parse(req.url, true);
-    const key = query.key as string;
-
-    res.send({
-        result: {
-            available: isAvailableKey(key),
-        },
-    });
-    res.end();
+    try {
+        if (hasMethod(method)) {
+            const methodFunc = methods[method];
+            res.send({
+                result: await methodFunc(query),
+            });
+        } else {
+            // noinspection ExceptionCaughtLocallyJS
+            throw new Error('unknown method');
+        }
+    } catch (e) {
+        res.send({
+            error: (e as Error).message,
+        });
+    }
 });
 
 void service.start(7001).then(() => console.log('Server started'));

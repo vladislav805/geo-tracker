@@ -7,8 +7,6 @@ let nodeSpeed: HTMLElement;
 let nodeLatency: HTMLElement;
 let nodeWay: HTMLElement;
 
-let previousPosition: IPositionRecord;
-
 export const initBar = (): void => {
     nodeSpeed = document.getElementById('speed');
     nodeLatency = document.getElementById('latency');
@@ -17,13 +15,9 @@ export const initBar = (): void => {
 };
 
 export const setBarInfo = (position: IPositionRecord): void => {
-    /*const kmPh = previousPosition
-        ? getSpeedByInterpolate(position, previousPosition)
-        : position.speed;*/
     const kmPh = position.speed;
     nodeSpeed.textContent = kmPh.toFixed(1);
     nodeLatency.dataset.time = String(position.time);
-    previousPosition = position;
 
     const broadcaster = getBroadcaster();
 

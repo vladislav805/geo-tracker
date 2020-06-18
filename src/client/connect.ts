@@ -9,7 +9,7 @@ export const connect = (): Promise<WebSocket> => {
         }
 
         const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-        const endpoint = `${protocol}://${window.location.host}/ws`;
+        const endpoint = `${protocol}://${window.location.host}/api/ws`;
 
         socket = new WebSocket(endpoint);
 
