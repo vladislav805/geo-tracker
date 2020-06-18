@@ -1,28 +1,6 @@
 @import 'scss/reset';
 @import 'scss/var';
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html,
-body {
-    height: 100%;
-    overflow: hidden;
-    font-family: $fontStack;
-    font-size: $fontBaseSize;
-}
-
-body {
-    display: flex;
-    flex-flow: column nowrap;
-}
-
-.theme__dark {
-    background-color: #000000;
-}
-
+@import 'scss/basic';
 @import 'scss/map';
-@import 'scss/infobar';
+@import 'scss/panel';
+@import 'scss/battery';

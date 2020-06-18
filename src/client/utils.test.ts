@@ -1,4 +1,4 @@
-import { distance, getHumanTimeDiff, getSpeedByInterpolate, rad } from './utils';
+import { distance, getSpeedByInterpolate, rad } from './utils';
 import { IPositionRecord } from '../types';
 
 describe('Client utils', () => {
@@ -29,20 +29,5 @@ describe('Client utils', () => {
         };
 
         expect(getSpeedByInterpolate(pos2, pos1)).toBeCloseTo(30.18);
-    });
-
-    it('Function getHumanTimeDiff', () => {
-        expect(getHumanTimeDiff(1)).toBe('1 second');
-        expect(getHumanTimeDiff(2)).toBe('2 seconds');
-        expect(getHumanTimeDiff(5)).toBe('5 seconds');
-        expect(getHumanTimeDiff(10)).toBe('10 seconds');
-        expect(getHumanTimeDiff(11)).toBe('11 seconds');
-        expect(getHumanTimeDiff(20)).toBe('20 seconds');
-        expect(getHumanTimeDiff(21)).toBe('21 second');
-        expect(getHumanTimeDiff(60)).toBe('1 minute');
-        expect(getHumanTimeDiff(61)).toBe('1 minute, 1 second');
-        expect(getHumanTimeDiff(120)).toBe('2 minutes');
-        expect(getHumanTimeDiff(121)).toBe('2 minutes, 1 second');
-        expect(getHumanTimeDiff(122)).toBe('2 minutes, 2 seconds');
     });
 });
