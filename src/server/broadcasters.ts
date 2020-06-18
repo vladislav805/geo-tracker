@@ -41,4 +41,4 @@ export const getPosition = (key: string): IPositionRecord => {
         : null;
 };
 
-export const isAvailableKey = (key: string): boolean => hasBroadcaster(key);
+export const isAvailableKey = (key: string): boolean => !hasBroadcaster(key);
