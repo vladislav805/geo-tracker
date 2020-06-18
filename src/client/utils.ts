@@ -31,7 +31,7 @@ export const getSpeedByInterpolate = (fresh: IPositionRecord, previous: IPositio
 const pluralize = (n: number, text: string): string => (n % 10) === 1 && n !== 11 ? text : text + 's';
 
 export const getHumanTimeDiff = (delta: number): string => {
-    const m = Math.floor(delta / 60 % 60);
+    const m = Math.floor(delta / 60);
     const s = Math.floor(delta % 60);
     const res = [];
 
