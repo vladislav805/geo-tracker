@@ -1,0 +1,36 @@
+$color: #ffffff;
+$width: 30px;
+$aspect-ratio: .6;
+$height: $aspect-ratio * $width;
+
+.battery {
+    position: relative;
+    width: $width;
+    height: $height;
+    border: 1px solid $color;
+
+    font-size: 12px;
+    text-align: center;
+    line-height: $height - 2px;
+
+    &::after {
+        content: "";
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        width: calc(var(--battery-level) * 1%);
+        background: rgba($color, .4);
+        position: absolute;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 10px;
+        background: $color;
+    }
+}

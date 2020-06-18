@@ -8,10 +8,14 @@
 	</head>
 	<body>
 		<div id="map"></div>
-		<div class="infobar">
-			<div class="infobar__speed">Speed: <span id="speed">0</span> km/h</div>
-			<div class="infobar__latency" id="latency">Waiting for signal...</div>
-			<div class="infobar__way" id="way">unknown</div>
+		<div class="panel panel__speed" id="speed">0 km/h</div>
+		<div class="panel panel__battery">
+			<div class="battery" id="battery"></div>
+		</div>
+		<div class="panel panel__latency" id="latency">Waiting for signal...</div>
+		<div class="panel panel__info">
+			<div id="distance">0 m</div>
+			<div id="duration">00:00</div>
 		</div>
 	</body>
 </html>

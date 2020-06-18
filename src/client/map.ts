@@ -50,7 +50,7 @@ export const initMap = (): void => {
         interactive: true,
     }).addTo(map);
 
-    L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
+    L.control.scale({ position: 'bottomright', imperial: false }).addTo(map);
 
     createToggleControl({
         label: 'Follow marker',

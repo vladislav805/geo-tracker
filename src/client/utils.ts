@@ -28,23 +28,11 @@ export const getSpeedByInterpolate = (fresh: IPositionRecord, previous: IPositio
     return Math.abs(S / t) || 0;
 };
 
-const pluralize = (n: number, text: string): string => (n % 10) === 1 && n !== 11 ? text : text + 's';
-
-export const getHumanTimeDiff = (delta: number): string => {
-    const m = Math.floor(delta / 60);
-    const s = Math.floor(delta % 60);
-    const res = [];
-
-    if (m) {
-        res.push(`${m} ${pluralize(m, 'minute')}`);
-    }
-
-    if (s) {
-        res.push(`${s} ${pluralize(s, 'second')}`);
-    }
-
-    return res.join(', ');
-};
+export const toDuration = (delta: number): string => [
+    Math.floor(delta / 3600) > 0 ? Math.floor(delta / 3600) : undefined,
+    Math.floor(delta / 60 % 60),
+    Math.floor(delta % 60),
+].filter(s => s !== undefined).map(n => n >= 10 ? n : `0${n}`).join(':');
 
 export const wayDistance = (way: IWaypoint[]): number => {
     let res = 0;
@@ -59,5 +47,5 @@ export const wayDistance = (way: IWaypoint[]): number => {
 };
 
 export const distanceHumanize = (km: number): string => km < 1
-    ? `${((km / 1000) | 0)}m`
-    : `${km.toFixed(1)}km`;
+    ? `${((km / 1000) | 0)} m`
+    : `${km.toFixed(1)} km`;
